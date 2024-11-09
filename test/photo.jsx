@@ -13,10 +13,10 @@ import {
   ScrollView,
 } from "react-native";
 
-import { icons } from "../../constants";
-import { createPost, } from "../../lib/appwrite";
-import { CustomButton, FormField } from "../../components";
-import { useGlobalContext } from "../../context/GlobalProvider";
+import { icons } from "../constants";
+import { createPost, } from "../lib/appwrite";
+import { CustomButton, FormField } from "../components";
+import { useGlobalContext } from "../context/GlobalProvider";
 
 const PhotoCreate = () => {
   const { user } = useGlobalContext();

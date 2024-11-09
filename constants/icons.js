@@ -12,7 +12,10 @@ import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 import photoIcon from "../assets/icons/picture.png";
-
+import timer from "../assets/icons/timer.png";
+import smiley from "../assets/icons/smileyem.webp";
+import rocket from "../assets/icons/rocket.png";
+import bell from "../assets/icons/bell_icon.png";
 export default {
   play,
   bookmark,
@@ -27,5 +30,10 @@ export default {
   logout,
   eyeHide,
   eye,
+  upload,
   photoIcon,
+  timer,
+  smiley,
+  rocket,
+  bell,
 };

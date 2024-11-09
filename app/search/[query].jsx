@@ -4,12 +4,13 @@ import { View, Text, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import useAppwrite from "../../lib/useAppwrite";
-import { searchPosts } from "../../lib/appwrite";
-import { EmptyState, SearchInput, VideoCard } from "../../components";
+import { searchDatabase, searchPosts } from "../../lib/appwrite";
+import { EmptyState, renderItem, SearchInput, VideoCard } from "../../components";
 
 const Search = () => {
   const { query } = useLocalSearchParams();
-  const { data: posts, refetch } = useAppwrite(() => searchPosts(query));
+  // const { data: posts, refetch } = useAppwrite(() => searchPosts(query));
+  const { data: posts, refetch } = useAppwrite(() => searchDatabase(query));
 
   useEffect(() => {
     refetch();
@@ -17,8 +18,8 @@ const Search = () => {
 
   return (
     <SafeAreaView className="bg-primary h-full">
-   
-      <FlatList
+      
+      {/* <FlatList
         data={posts}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
@@ -29,7 +30,12 @@ const Search = () => {
             creator={item.creator.username}
             avatar={item.creator.avatar}
           />
-        )}
+          
+        )} */}
+        <FlatList
+        data={posts}
+        keyExtractor={(item) => item.$id}
+        renderItem={({ item }) => renderItem({ item })} 
         ListHeaderComponent={() => (
           <>
             <View className="flex my-6 px-4">

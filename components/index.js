@@ -7,7 +7,7 @@ import Trending from "./Trending";
 import SearchInput from "./SearchInput";
 import EmptyState from "./EmptyState";
 import GridItem from "./GridItem";
-import renderItem from "./renderItem";
+import renderItem from "./RenderFunctions";
 
 export {
   VideoCard,
