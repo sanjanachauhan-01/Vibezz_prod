@@ -1,12 +1,18 @@
 import React, { useState, useRef, useEffect, } from "react";
 import { View, Text, TouchableOpacity, Image, Animated, TextInput, Platform, Modal, KeyboardAvoidingView,BackHandler, StyleSheet, Dimensions, FlatList, StatusBar, SafeAreaView } from "react-native";
 import { icons } from "../constants";
-import { createBookmark } from "../lib/appwrite";
+import { addComment, addOrUpdateReaction, createBookmark, createLike, updateReaction } from "../lib/appwrite";
 import LottieView from 'lottie-react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { BlurView } from "expo-blur";
+import { useGlobalContext } from "../context/GlobalProvider";
+import EvilIcons from '@expo/vector-icons/EvilIcons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+const PostOptions = ({ docId, bookmark, username , userID }) => {
 
 
-const PostOptions = ({ docId, bookmark }) => {
   const [selectedLottie, setSelectedLottie] = useState(require('../assets/lottie/happy.json'));
   const [showPicker, setShowPicker] = useState(false);
   const [focused, setFocus] = useState(bookmark);
@@ -20,6 +26,10 @@ const PostOptions = ({ docId, bookmark }) => {
   const [searchInputValue, searchsetTextInputValue] = useState('');
   const [shareVisible ,setShareModalVisible] = useState(false);
   const [sendStates, setSendStates] = useState({});
+
+
+  const [likedEmojiId, setLikedEmojiId] = useState(null); 
+
 
   const lotties = [
     { id: '1', source: require('../assets/lottie/love.json') },
@@ -143,6 +153,8 @@ const renderItem = ({ item }) => {
   const onLottieClick = (item) => {
     setSelectedLottie(item.source);
     setShowPicker(false);
+    // createLike( docId ,item.id);
+    addOrUpdateReaction(docId,username, userID,item.id) //extsanch
   };
 
 
@@ -164,6 +176,8 @@ const renderItem = ({ item }) => {
   const handleMessageInputChange = (text) => {
     messagesetTextInputValue(text); // Update state with the current input value
   };
+
+
   const handleLike = () => {
     setShowPicker(!showPicker);
     if (showPicker) {
@@ -200,14 +214,19 @@ const renderItem = ({ item }) => {
         console.log('Submitted Text:', textInputValue); // Log the final submitted value
         setModalVisible(!modalVisible);
         setModalMarginTop('130%');
+
+      
         // Additional logic to handle the submission
       };
     
   const handleSubmit = () => {
+    
     console.log('Submitted Text:', textInputValue); // Log the final submitted value
+   
     setModalVisible(!modalVisible);
     setModalMarginTop('130%');
     // Additional logic to handle the submission
+    addComment(docId,username, userID,textInputValue);
   };
   const showPickerAnim = () => {
     Animated.timing(slideAnim, {
@@ -252,12 +271,14 @@ const renderItem = ({ item }) => {
   );
 
   return (
+  
     <View style={{ 
       flexDirection: 'row',
       backgroundColor: 'transparent', 
       width: Dimensions.get('window').width,
       alignItems: 'center',
-      paddingHorizontal: '5%'
+      // paddingHorizontal: '5%'
+      paddingHorizontal:10
     }}>
       <TouchableOpacity onPress={handleLike}>
         <LottieView
@@ -268,25 +289,30 @@ const renderItem = ({ item }) => {
         />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={handleComment} style={{ marginHorizontal: 5 }}>
-        <LottieView
+      <TouchableOpacity onPress={handleComment} style={{ marginHorizontal: 5 , paddingHorizontal:10}}>
+        {/* <LottieView
           source={require('../assets/lottie/comment_1.json')}
           autoPlay
           loop
           style={{ width: 40, height: 40 }}
-        />
+        /> */}
+     {/* <FontAwesome5 name="comment-alt" size={23} color="white" />
+      */}
+      <FontAwesome5 name="comment" size={24} color="white" />
+
       </TouchableOpacity>
 
       <TouchableOpacity onPress={handleShare} style={{ marginHorizontal: 5 }}>
-        <LottieView
+        {/* <LottieView
           source={require('../assets/lottie/send_4.json')}
           autoPlay
           loop
           style={{ width: 40, height: 40 }}
-        />
+        /> */}
+        <MaterialIcons name="send" size={24} color="white" />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={handlePress} style={{ marginLeft: '50%' }}>
+      <TouchableOpacity onPress={handlePress} style={{ flex: 1, justifyContent: 'flex-end' , alignItems: 'flex-end', paddingRight: '1%'}}>
         <Image
           source={icons.bookmark}
           tintColor={focused ? '#818cf8' : 'white'}
@@ -368,10 +394,10 @@ const renderItem = ({ item }) => {
             <AntDesign name="close" size={20} color="white" />
             </TouchableOpacity>
             </View>
-            <View style={[styles.input, { height: 140 , padding: 10}]}>
+            <View style={[styles.input, { height: 140 , padding: 10 }]}>
             <TextInput
               ref={textInputRef}
-              // style={[styles.input, { height: 140}]}
+              style={{color:'white'}}
               placeholder="Type your comment"
               onFocus={handleTextInputFocus}
               value={textInputValue}
@@ -380,12 +406,14 @@ const renderItem = ({ item }) => {
               multiline={true}
             />
              </View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={handleSubmit}
-            >
-              <Text style={styles.buttonText}>Submit</Text>
-            </TouchableOpacity>
+             <TouchableOpacity
+  style={[styles.button, !textInputValue && styles.buttonDisabled]}
+  onPress={handleSubmit}
+  disabled={!textInputValue}
+>
+  <Text style={styles.buttonText}>Submit</Text>
+</TouchableOpacity>
+
             {/* <TouchableOpacity
               style={styles.button}
               onPress={() => handleClose()}
@@ -454,6 +482,7 @@ const renderItem = ({ item }) => {
         </Modal>
       </KeyboardAvoidingView>
     </View>
+  
   );
 };
 
@@ -500,6 +529,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingHorizontal: 10,
    borderRadius:10,
+   
   },
   
   button: {
@@ -604,6 +634,19 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingHorizontal: 10,
    borderRadius:10,
+  },
+  button: {
+    backgroundColor: '#818cf8', // enabled button color
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonDisabled: {
+    backgroundColor: '#ccc', // disabled button color
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 

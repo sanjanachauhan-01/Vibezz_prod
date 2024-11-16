@@ -16,27 +16,19 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "package": "com.vibezzapple.com"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "package": "com.vibezzandroid.com"
+        "backgroundColor": "#ffffff"
       }
     },
     "web": {
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router",
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
-        }
-      ]
+      "expo-router"
     ]
   }
 }

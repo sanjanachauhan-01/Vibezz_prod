@@ -42,6 +42,7 @@ const Bookmark = () => {
           <EmptyState
             title="No Videos or Photos Found"
             subtitle="No videos found for this profile"
+            show={true}
           />
         )}
         refreshControl={

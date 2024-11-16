@@ -4,6 +4,7 @@ import { ResizeMode, Video } from "expo-av";
 import { icons } from "../constants";
 import Waveform from "./Waveform";
 import PostOptions from "./PostOptions";
+import { BlurView } from "expo-blur";
 
 const VideoCard = ({ docId, title, creator, avatar, thumbnail, video, bookmark, titleRec }) => {
   const [play, setPlay] = useState(false);
@@ -106,9 +107,32 @@ const VideoCard = ({ docId, title, creator, avatar, thumbnail, video, bookmark, 
         </TouchableOpacity>
       )}
 
-      <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent', width: '100%', marginTop: 10, height: 45 }}>
+      {/* <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent', width: '100%', marginTop: 10, height: 45 }}>
         <PostOptions docId={docId} bookmark={bookmark} />
-      </View>
+      </View> */}
+
+<View
+    style={{
+      position: 'absolute',
+      bottom: 0, // Aligns the BlurView at the bottom
+      left: 0,
+      right: 0,
+      height: 45,
+    }}
+  >
+    <BlurView
+      style={{
+        height: 45,
+        // paddingHorizontal: 10,
+        flex: 1,
+        alignSelf: 'stretch', // Stretches to fill the width
+        justifyContent: 'center' , 
+        
+      }}
+    >
+      <PostOptions docId={docId} bookmark={bookmark} />
+    </BlurView>
+  </View>
 
       {titleRec && (
         <View style={{ height: 40, width: "100%" }}>

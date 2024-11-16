@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Animated, StyleSheet } from 'react-native
 import { Audio } from 'expo-av';
 import { AntDesign } from '@expo/vector-icons';
 
-const Waveform = ({ recordingUri, onDelete, nodelete }) => {
+const Waveform = ({ recordingUri, onDelete, nodelete}) => {
   const [sound, setSound] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);

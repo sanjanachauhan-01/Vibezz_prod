@@ -45,7 +45,12 @@ const Moods = ({ onClose}) => {
   );
 
   return (
-    <View style={{ backgroundColor: 'transparent' , height: '40%',}}> 
+    <View style={{ 
+      backgroundColor: 'transparent' , 
+      // backgroundColor:'red',
+    height: '40%',
+    width:'100%'
+    }}> 
         <Text style={{ textAlign:'center' , color: '#bfdbfe'}}>How are you feeling today?</Text>
     <View style={styles.container}>
       <TouchableOpacity style={styles.closeButton} onPress={onClose}>

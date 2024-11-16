@@ -202,8 +202,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     zIndex: 1,
-    marginTop: '178%',
-    marginLeft: '80%',
+    marginTop: '170%',
+    marginLeft: '90%',
   },
   button: {
     position: 'absolute',

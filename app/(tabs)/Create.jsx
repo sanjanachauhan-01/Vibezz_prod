@@ -74,7 +74,7 @@ const Create = () => {
   };
 
   const openPicker = async () => {
-    setUploadPost(false);
+    // setUploadPost(false);
     const mediaType = ImagePicker.MediaTypeOptions.All;
 
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -84,6 +84,7 @@ const Create = () => {
     });
 
     if (!result.canceled) {
+      setUploadPost(false);
       const asset = result.assets[0];
       console.log("MY ASSET", asset);
 
@@ -214,7 +215,7 @@ const Create = () => {
           <Text className="text-base text-gray-100 font-pmedium">
             Upload Post
           </Text>
-          {uploadPost ? (
+          {uploadPost && !isPhoto && !isVideo ? (
             <TouchableOpacity onPress={() => openPicker()}>
               <View className="w-full h-40 px-4 bg-black-100 rounded-2xl border border-black-200 flex justify-center items-center">
                 <View className="w-14 h-14 border border-dashed border-secondary-100 flex justify-center items-center">
