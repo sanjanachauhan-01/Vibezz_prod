@@ -173,11 +173,12 @@ const Create = () => {
   } else {
     setUploading(true);
     try {
-      await createPost({
+      const result =  await createPost({
         ...form,
         userId: user.$id,
         postType: "Photo",
       });
+      alert(result);
       Alert.alert("Success", "Post uploaded successfully");
       router.push("/home");
     } catch (error) {

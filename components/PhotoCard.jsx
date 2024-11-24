@@ -302,11 +302,13 @@ import Carousel from "react-native-reanimated-carousel";
 import { icons } from "../constants";
 
 const PhotoCard = ({ docId, title, creator, avatar, photo, bookmark, titleRec, name, userID, video, thumbnail, posts }) => {
+  console.log(posts[0].photo)
   const [play, setPlay] = useState(false);
   // const [videoDimensions, setVideoDimensions] = useState({ width: '100%', height: 200 });
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [dimensions, setDimensions] = useState({ width: '100%', height: 300 });
   const [loading, setLoading] = useState(true);
   const [visible, setVisibility] = useState(false);
+
 
   const handleVideoLoad = (status) => {
     if (status.isLoaded && status.naturalSize) {
@@ -329,8 +331,10 @@ const PhotoCard = ({ docId, title, creator, avatar, photo, bookmark, titleRec, n
     setLoading(false);
   };
 
+
+
   useEffect(() => {
-    Image.getSize(photo, (width, height) => {
+    Image.getSize(photo ? photo: thumbnail, (width, height) => {
       const maxWidth = Dimensions.get('window').width * 0.9;
       const maxHeight = Dimensions.get('window').height * 0.9;
       const aspectRatio = width / height;
@@ -348,30 +352,10 @@ const PhotoCard = ({ docId, title, creator, avatar, photo, bookmark, titleRec, n
       console.log('Error loading image dimensions:', error);
       setLoading(false);
     });
-  }, [photo]);
+  }, []);
 
-  useEffect(() => {
-    Image.getSize(thumbnail, (width, height) => {
-      const maxWidth = Dimensions.get('window').width * 0.9;
-      const maxHeight = Dimensions.get('window').height * 0.9;
-      const aspectRatio = width / height;
-      let finalWidth = maxWidth;
-      let finalHeight = maxWidth / aspectRatio;
-
-      if (finalHeight > maxHeight) {
-        finalHeight = maxHeight;
-        finalWidth = maxHeight * aspectRatio;
-      }
-
-      setDimensions({ width: finalWidth, height: finalHeight });
-      setLoading(false);
-    }, (error) => {
-      console.log('Error loading image dimensions:', error);
-      setLoading(false);
-    });
-  }, [thumbnail]);
-
-  const { data: comments, refetch } = useAppwrite(fetchComments, docId);
+  
+  const dataofpost = posts[0].photo;
 
   const onPress = () => {
     setVisibility(false);
@@ -379,7 +363,9 @@ const PhotoCard = ({ docId, title, creator, avatar, photo, bookmark, titleRec, n
   // alert(video)
  return (
   <>
-    <TouchableWithoutFeedback onPress={onPress}>
+    {/* <TouchableWithoutFeedback onPress={onPress}>
+     */}
+     <View> 
       <View className="flex flex-col items-center px-1 mb-1">
         <View className="flex flex-row gap-3 items-start">
           <View className="flex justify-center items-center flex-row flex-1">
@@ -411,20 +397,21 @@ const PhotoCard = ({ docId, title, creator, avatar, photo, bookmark, titleRec, n
         ) : (
           <Carousel
           loop
-          enabled={false} //this will change when each post will have multiple docs     
+          // enabled={false} //this will change when each post will have multiple docs     
           width={Dimensions.get('window').width*0.9}
           snapEnabled
           style={{ alignItems:'center', justifyContent:'center'}}
           height={dimensions.height*0.9}
-          data={posts} // Placeholder data for the carousel item
+          data={dataofpost} // Placeholder data for the carousel item
+          // data={photos}
           scrollAnimationDuration={1000}
           onSnapToItem={(index) => console.log('current index:', index)}
           renderItem={({ item }) => {
             // Conditional rendering for photo/video
-            if (photo) {
+            if (photo[0] === !null) {
               return (
                 <ImageBackground
-                  source={{ uri: photo }}
+                  source={{ uri: item }}
                   resizeMode="cover"
                   style={{
                     width: '100%',
@@ -515,7 +502,7 @@ const PhotoCard = ({ docId, title, creator, avatar, photo, bookmark, titleRec, n
               justifyContent: 'center',
             }}
           >
-            <PostOptions docId={docId} bookmark={bookmark} username={name} userID={userID} refetch={refetch} />
+            <PostOptions docId={docId} bookmark={bookmark} username={name} userID={userID} />
           </BlurView>
         {/* </View> */}
 
@@ -531,9 +518,10 @@ const PhotoCard = ({ docId, title, creator, avatar, photo, bookmark, titleRec, n
         {/* <CommentsSection postID={docId} userID={userID} avatar={avatar} username={name} comments={comments} refetch={refetch} /> */}
         </View>
       </View>
-    </TouchableWithoutFeedback>
+    {/* </TouchableWithoutFeedback> */}
+    </View>
 <View style={{ top:0, left:0, bottom:0, marginBottom:10, marginHorizontal:5}}> 
-     <CommentsSection postID={docId} userID={userID} avatar={avatar} username={name} comments={comments} refetch={refetch} />
+     <CommentsSection postID={docId} userID={userID} avatar={avatar} username={name} />
      </View>
     </>
   );

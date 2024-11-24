@@ -226,7 +226,8 @@ const renderItem = ({ item }) => {
     setModalVisible(!modalVisible);
     setModalMarginTop('130%');
     // Additional logic to handle the submission
-    addComment(docId,username, userID,textInputValue);
+    // addComment(docId,username, userID,textInputValue);
+    addComment(docId, username, userID, textInputValue)
   };
   const showPickerAnim = () => {
     Animated.timing(slideAnim, {
