@@ -49,7 +49,7 @@ const RootLayout = () => {
         <Stack.Screen name='screens/Messages'  options={{ headerShown: false }} />
         <Stack.Screen name='screens/LatestVideos'  options={{ headerShown: false }} />
         <Stack.Screen name='screens/FrizzComponent'  options={{ headerShown: false }} />
-        
+
       </Stack>
       </GestureHandlerRootView>
     </GlobalProvider>
