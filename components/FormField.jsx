@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect, useRef,  } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Audio } from 'expo-av';
 import { icons } from '../constants';
 import { Ionicons } from '@expo/vector-icons';
 import Waveform from './Waveform';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { Dimensions } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Feather from '@expo/vector-icons/Feather';
+import { BorderRight } from '@mui/icons-material';
 
 const FormField = ({
   title,
@@ -12,6 +17,7 @@ const FormField = ({
   handleChangeText,
   otherStyles,
   record,
+  showAIbutton,
   onRecordingComplete, // New prop for handling the recording URI
   ...props
 }) => {
@@ -21,6 +27,19 @@ const FormField = ({
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [timer, setTimer] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
+  const [ showAI, setShowAI] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const textInputRef = useRef(null);
+  const [textInputValue, setTextInputValue] = useState('');
+  
+  const handleInputChange = (text) => {
+    setMessage(text); // Update state with the current input value
+  };
+  const handleSend = () => {
+
+    console.log("message");
+  }
 
   useEffect(() => {
     let interval;
@@ -76,6 +95,67 @@ const FormField = ({
     setRecordingUri(null);
   };
 
+
+  
+  const HandleAIprompts = (value) => {
+  const screenWidth = Dimensions.get('window').width;
+  const screenHeight = Dimensions.get('window').height;
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        height: screenHeight*0.80,
+        width: screenWidth *0.90,
+        zIndex: 10,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        borderRadius:20,
+        flexWrap:'wrap'
+      }}
+    >
+      <View style={{ top:15 , flexDirection:'row', justifyContent:'space-around', alignContent:'space-around'}}> 
+      <View> 
+      <Text style={{color:'white'}}>Enter your title</Text>
+      <Text style={{ fontSize:10, color:'gray'}}> click the send button and choose from your desired titles</Text>
+      </View>
+      <TouchableOpacity
+        onPress={() => setShowAI(false)}
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          padding: 5,
+          borderRadius: 5,
+          left:0
+        }}
+      >
+        <AntDesign name="closecircleo" size={20} color="black" />
+      </TouchableOpacity>
+      </View>
+      <View style={{ top:30 , borderRadius:20 , marginHorizontal:5}}> 
+       <View style={[styles.container]}>
+      <TextInput
+         ref={textInputRef}
+         style={styles.input}
+         placeholder= { value ?  value :  "Type your title"}
+        //  onFocus={handleTextInputFocus}
+         value={textInputValue}
+         onChangeText={handleInputChange}
+         placeholderTextColor="white"
+         multiline={true}
+          
+      />
+      <TouchableOpacity style={{ height:24 , width:24, borderRadius:24}} onPress={handleSend}>
+        {/* <Text style={styles.buttonText}>Send</Text> */}
+        <Feather name="send" size={20} color="black" />
+      </TouchableOpacity>
+    </View>
+      </View>
+    </View>
+  )
+  }
   return (
     <View style={{ marginBottom: 16, ...otherStyles }}>
       <Text style={{ fontSize: 16, color: '#7B7B8B', marginBottom: 8 }}>{title}</Text>
@@ -112,6 +192,13 @@ const FormField = ({
             />
           </TouchableOpacity>
         )}
+
+<View style={{ flexDirection:'row' , width:65, alignItems:'center', justifyContent:'center'}}>
+{showAIbutton &&  value && (
+  <TouchableOpacity style={{ paddingRight:40}} onPress={()=> setShowAI(true)}> 
+  <MaterialCommunityIcons name="magic-staff" size={24} color="white" />
+  </TouchableOpacity>
+)}
         {record && (
           <>
             <TouchableOpacity 
@@ -135,9 +222,48 @@ const FormField = ({
             )}
           </>
         )}
+     </View>
       </View>
+      {showAI && ( <HandleAIprompts value={value}/> )}
     </View>
+
+    
   );
 };
 
 export default FormField;
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    // borderTopWidth: 1,
+    // borderTopColor: '#ccc',
+    backgroundColor:'#7B7B8B',
+    borderRadius:20
+  },
+  input: {
+    flex:1,
+    height: 30,
+    color:'white'
+    // borderColor: '#ccc',
+    // borderWidth: 1,
+    // borderRadius: 20,
+    // paddingLeft: 10,
+  },
+  // button: {
+  //   backgroundColor: '#007BFF',
+  //   paddingVertical: 10,
+  //   paddingHorizontal: 20,
+  //   borderRadius: 20,
+  //   marginLeft: 10,
+  // },
+  // buttonText: {
+  //   color: '#fff',
+  //   fontWeight: 'bold',
+  // },
+});
+
+
+         

@@ -37,6 +37,7 @@
     "expo-linking": "~6.3.1",
     "expo-notifications": "~0.28.19",
     "expo-router": "~3.5.24",
+    "expo-speech": "~12.0.2",
     "expo-status-bar": "~1.12.1",
     "expo-video-thumbnails": "~8.0.0",
     "font-awesome": "^4.7.0",
@@ -68,8 +69,7 @@
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.10",
     "styled-components": "^6.1.11",
-    "toggle-switch-react-native": "^3.3.0",
-    "expo-speech": "~12.0.2"
+    "toggle-switch-react-native": "^3.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
